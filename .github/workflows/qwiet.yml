@@ -42,7 +42,7 @@ jobs:
       with:
         node-version: '20.x'
     - name: NextGen Static Analysis
-      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg  ./build/libs/VulnerableApp-1.0.0.jar ./build/tmp/expandedArchives/org.jacoco.agent-0.8.5.jar_6a2df60c47de373ea127d14406367999/jacocoagent.jar
+      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-Java --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg  ./build/libs/VulnerableApp-1.0.0.jar ./build/tmp/expandedArchives/org.jacoco.agent-0.8.5.jar_6a2df60c47de373ea127d14406367999/jacocoagent.jar
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
         SHIFTLEFT_API_HOST: www.shiftleft.io
@@ -54,7 +54,7 @@ jobs:
         npm intall
         npm ci
     - name: NextGen Static Analysis js
-      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --js --cpg  .
+      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-JS --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --js --cpg  .
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
         SHIFTLEFT_API_HOST: www.shiftleft.io
@@ -70,7 +70,7 @@ jobs:
         curl https://cdn.shiftleft.io/download/sl > ${GITHUB_WORKSPACE}/sl && chmod a+rx ${GITHUB_WORKSPACE}/sl
     - name: Validate Build Rules
       run: |
-        ${GITHUB_WORKSPACE}/sl check-analysis --app VulnerableApp \
+        ${GITHUB_WORKSPACE}/sl check-analysis --app VulnerableApp-Java \
             --github-pr-number=${{github.event.number}} \
             --github-pr-user=${{ github.repository_owner }} \
             --github-pr-repo=${{ github.event.repository.name }} \
@@ -80,3 +80,15 @@ jobs:
         SHIFTLEFT_API_HOST: www.shiftleft.io
         SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
         SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443 
+    - name: Validate Build Rules
+      run: |
+        ${GITHUB_WORKSPACE}/sl check-analysis --app VulnerableApp-JS \
+            --github-pr-number=${{github.event.number}} \
+            --github-pr-user=${{ github.repository_owner }} \
+            --github-pr-repo=${{ github.event.repository.name }} \
+            --github-token=${{ secrets.GITHUB_TOKEN }}
+      env:
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+        SHIFTLEFT_API_HOST: www.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
+        SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443         

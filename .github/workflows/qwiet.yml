@@ -39,7 +39,7 @@ jobs:
         find . -type f | grep -E 'jar|war|ear'
   
     - name: NextGen Static Analysis
-      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-Java-bin --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg  ./build/libs/VulnerableApp-1.0.0.jar ./build/tmp/expandedArchives/org.jacoco.agent-0.8.5.jar_6a2df60c47de373ea127d14406367999/jacocoagent.jar
+      run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg  ./build/libs/VulnerableApp-1.0.0.jar ./build/tmp/expandedArchives/org.jacoco.agent-0.8.5.jar_6a2df60c47de373ea127d14406367999/jacocoagent.jar
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
         SHIFTLEFT_API_HOST: www.shiftleft.io
@@ -55,7 +55,7 @@ jobs:
         curl https://cdn.shiftleft.io/download/sl > ${GITHUB_WORKSPACE}/sl && chmod a+rx ${GITHUB_WORKSPACE}/sl
     - name: Validate Build Rules
       run: |
-        ${GITHUB_WORKSPACE}/sl check-analysis --app VulnerableApp-Java-bin \
+        ${GITHUB_WORKSPACE}/sl check-analysis --app VulnerableApp \
             --github-pr-number=${{github.event.number}} \
             --github-pr-user=${{ github.repository_owner }} \
             --github-pr-repo=${{ github.event.repository.name }} \

@@ -36,7 +36,7 @@ jobs:
       run: |
         chmod a+X ./gradlew
         ./gradlew build
-        tree
+        find . -type f | grep -E 'jar|war|ear'
   
     - name: NextGen Static Analysis
       run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-Java-Src --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --javasrc --cpg  .

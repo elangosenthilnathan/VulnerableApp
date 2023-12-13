@@ -52,7 +52,7 @@ jobs:
       shell: bash
       run: |
         find . -type f | grep 'package.json'
-        npm ci ./build/spotless-node-modules-prettier-format/node_modules/.package-lock.json
+        npm install ./build/spotless-node-modules-prettier-format/package.json
     - name: NextGen Static Analysis js
       run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-JS --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --js --cpg  .
       env:

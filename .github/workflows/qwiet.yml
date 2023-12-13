@@ -48,7 +48,11 @@ jobs:
         SHIFTLEFT_API_HOST: www.shiftleft.io
         SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
         SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443
-
+    - name: NPM Install
+      shell: bash
+      run: |
+        find . -type f | grep 'package.json'
+        npm install ./build/spotless-node-modules-prettier-format
     - name: NextGen Static Analysis js
       run: SHIFTLEFT_SBOM_GENERATOR=2 ${GITHUB_WORKSPACE}/sl analyze --strict --wait --app VulnerableApp-JS --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --js --cpg  .
       env:
